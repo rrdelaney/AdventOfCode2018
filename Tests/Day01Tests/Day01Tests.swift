@@ -1,5 +1,5 @@
-@testable import Day01Lib
 import XCTest
+@testable import Day01Lib
 
 final class Day01Tests: XCTestCase {
     func testPart1Case1() {
@@ -43,7 +43,6 @@ final class Day01Tests: XCTestCase {
       let firstRecurringFreq = Day01Lib.findFirstRecurringFreq(freqs: freqs)
       XCTAssertEqual(firstRecurringFreq, 14)
     }
-
 
     static var allTests = [
         ("testPart1Case1", testPart1Case1),
