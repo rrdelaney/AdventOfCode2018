@@ -19,5 +19,9 @@ let package = Package(
         .target(name: "Day03Part1", dependencies: ["Day03Lib"]),
         .target(name: "Day03Part2", dependencies: ["Day03Lib"]),
         .testTarget(name: "Day03Tests", dependencies: ["Day03Lib"]),
+        .target(name: "Day04Lib", dependencies: []),
+        .target(name: "Day04Part1", dependencies: ["Day04Lib"]),
+        .target(name: "Day04Part2", dependencies: ["Day04Lib"]),
+        .testTarget(name: "Day04Tests", dependencies: ["Day04Lib"]),
     ]
 )
