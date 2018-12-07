@@ -3,23 +3,25 @@ import Foundation
 struct Point: Hashable {
   let x: Int
   let y: Int
-}
 
-func parseCoord(from: String) -> Point {
-  let parts = from.components(separatedBy: ", ")
-  return Point(x: Int(parts[0])!, y: Int(parts[1])!)
+  func distanceFrom(_ other: Point) -> Int {
+    return abs(other.x - self.x) + abs(other.y - self.y)
+  }
+
+  static func fromString(_ from: String) -> Point {
+    let parts = from.components(separatedBy: ", ")
+    return Point(x: Int(parts[0])!, y: Int(parts[1])!)
+  }
 }
 
 func buildCoordGrid(points: [Point]) -> [Point: Point?] {
   var grid: [Point: Point?] = [:]
   var pointsTouchingBorder: Set<Point> = []
 
-  let xVals = points.map { $0.x }
-  let yVals = points.map { $0.y }
-  let minX = xVals.min()!
-  let maxX = xVals.max()!
-  let minY = yVals.min()!
-  let maxY = yVals.max()!
+  let minX = points.map({ $0.x }).min()!
+  let maxX = points.map({ $0.x }).max()!
+  let minY = points.map({ $0.y }).min()!
+  let maxY = points.map({ $0.y }).max()!
 
   for x in minX...maxX {
     for y in minY...maxY {
@@ -64,7 +66,7 @@ func buildCoordGrid(points: [Point]) -> [Point: Point?] {
 }
 
 public func getLargestArea(coords coorStrs: [String]) -> Int {
-  let coords = coorStrs.map(parseCoord)
+  let coords = coorStrs.map(Point.fromString)
   let grid = buildCoordGrid(points: coords)
 
   var areaSizes: [Point: Int] = [:]
@@ -82,31 +84,25 @@ public func getLargestArea(coords coorStrs: [String]) -> Int {
 }
 
 public func getSafeArea(coords coorStrs: [String], maxDistance: Int) -> Int {
-  let coords = coorStrs.map(parseCoord)
-  var safePoints: Set<Point> = []
+  let coords = coorStrs.map(Point.fromString)
 
-  let xVals = coords.map { $0.x }
-  let yVals = coords.map { $0.y }
-  let minX = xVals.min()!
-  let maxX = xVals.max()!
-  let minY = yVals.min()!
-  let maxY = yVals.max()!
+  let minX = coords.map({ $0.x }).min()!
+  let maxX = coords.map({ $0.x }).max()!
+  let minY = coords.map({ $0.y }).min()!
+  let maxY = coords.map({ $0.y }).max()!
 
-  for x in minX...maxX {
-    checkPoint: for y in minY...maxY {
-      var totalDistance = 0
-      for point in coords {
-        let dx = abs(point.x - x)
-        let dy = abs(point.y - y)
-        totalDistance += dx + dy
-
-        if totalDistance >= maxDistance {
-          continue checkPoint
-        }
-      }
-
-      safePoints.insert(Point(x: x, y: y))
+  let range = (minX...maxX).flatMap { x in
+    (minY...maxY).map { y in
+      Point(x: x, y: y)
     }
+  }
+
+  let safePoints = range.filter { r in
+    let totalDistance = coords
+      .map({ $0.distanceFrom(r) })
+      .reduce(0, +)
+
+    return totalDistance < maxDistance
   }
 
   return safePoints.count

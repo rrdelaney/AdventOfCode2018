@@ -1,7 +1,5 @@
 public func findFreqDrift(freqs: [Int]) -> Int {
-  return freqs.reduce(0, { prev, curr in
-    prev + curr
-  })
+  return freqs.reduce(0, +)
 }
 
 public func findFirstRecurringFreq(freqs: [Int]) -> Int {

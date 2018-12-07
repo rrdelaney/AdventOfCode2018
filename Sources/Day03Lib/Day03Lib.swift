@@ -10,21 +10,21 @@ struct Claim {
   let loc: Point
   let height: Int
   let width: Int
-}
 
-func parseClaim(claim: String) -> Claim {
-   let split1 = claim.components(separatedBy: " @ ")
-   let id = String(split1[0].dropFirst())
-   let split2 = split1[1].components(separatedBy: ",")
-   let x = split2[0]
-   let split3 = split2[1].components(separatedBy: ": ")
-   let y = split3[0]
-   let split4 = split3[1].components(separatedBy: "x")
-   let width = split4[0]
-   let height = split4[1]
+  static func fromString(_ claim: String) -> Claim {
+    let split1 = claim.components(separatedBy: " @ ")
+    let id = String(split1[0].dropFirst())
+    let split2 = split1[1].components(separatedBy: ",")
+    let x = split2[0]
+    let split3 = split2[1].components(separatedBy: ": ")
+    let y = split3[0]
+    let split4 = split3[1].components(separatedBy: "x")
+    let width = split4[0]
+    let height = split4[1]
 
-   let loc = Point(x: Int(x)!, y: Int(y)!)
-   return Claim(id: id, loc: loc, height: Int(height)!, width: Int(width)!)
+    let loc = Point(x: Int(x)!, y: Int(y)!)
+    return Claim(id: id, loc: loc, height: Int(height)!, width: Int(width)!)
+  }
 }
 
 func buildClaimGrid(claims: [Claim]) -> [Point: Set<String>] {
@@ -52,21 +52,13 @@ func buildClaimGrid(claims: [Claim]) -> [Point: Set<String>] {
 }
 
 public func numOverlappingClaims(claims claimStrs: [String]) -> Int {
-  let claims = claimStrs.map(parseClaim)
+  let claims = claimStrs.map(Claim.fromString)
   let grid = buildClaimGrid(claims: claims)
-
-  var hasTwoOrMoreCount = 0
-  for (_, seenIds) in grid {
-    if seenIds.count >= 2 {
-      hasTwoOrMoreCount += 1
-    }
-  }
-
-  return hasTwoOrMoreCount
+  return grid.values.filter({ $0.count >= 2 }).count
 }
 
 public func findNonoverlappingClaim(claims claimStrs: [String]) -> String {
-  let claims = claimStrs.map(parseClaim)
+  let claims = claimStrs.map(Claim.fromString)
   let grid = buildClaimGrid(claims: claims)
 
   var idsWithSomeOverlap: Set<String> = []

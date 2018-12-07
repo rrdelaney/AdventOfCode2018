@@ -13,30 +13,24 @@ func toggleCase(_ str: String) -> String {
 
 func collapse(polymer input: String) -> String {
   var polymer = input
-  var isDirty = false
 
-  repeat {
-    isDirty = false
+  var index = polymer.startIndex
+  while index != polymer.endIndex {
+    let nextIndex = polymer.index(after: index)
+    guard nextIndex != polymer.endIndex else { break }
 
-    var index = polymer.startIndex
-    while index != polymer.endIndex {
-      let nextIndex = polymer.index(after: index)
-      guard nextIndex != polymer.endIndex else { break }
+    let this = String(polymer[index])
+    let next = String(polymer[nextIndex])
 
-      let this = String(polymer[index])
-      let next = String(polymer[nextIndex])
-
-      if toggleCase(this) == next && this == toggleCase(next) {
-        isDirty = true
-        polymer.removeSubrange(index...nextIndex)
-        if (index != polymer.startIndex) {
-          index = polymer.index(before: index)
-        }
-      } else {
-        index = polymer.index(after: index)
+    if toggleCase(this) == next && this == toggleCase(next) {
+      polymer.removeSubrange(index...nextIndex)
+      if (index != polymer.startIndex) {
+        index = polymer.index(before: index)
       }
+    } else {
+      index = polymer.index(after: index)
     }
-  } while isDirty
+  }
 
   return polymer
 }
@@ -66,7 +60,7 @@ public func optimizedCollapseAndCount(polymer: String) -> Int {
   }
 
   let optimizedCounts = optimizedPolymers.map { optimizedPolymer in
-    return collapseAndCount(polymer: optimizedPolymer)
+    collapseAndCount(polymer: optimizedPolymer)
   }
 
   return optimizedCounts.min()!
