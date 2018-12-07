@@ -31,5 +31,9 @@ let package = Package(
         .target(name: "Day06Part1", dependencies: ["Day06Lib"]),
         .target(name: "Day06Part2", dependencies: ["Day06Lib"]),
         .testTarget(name: "Day06Tests", dependencies: ["Day06Lib"]),
+        .target(name: "Day07Lib", dependencies: []),
+        .target(name: "Day07Part1", dependencies: ["Day07Lib"]),
+        .target(name: "Day07Part2", dependencies: ["Day07Lib"]),
+        .testTarget(name: "Day07Tests", dependencies: ["Day07Lib"]),
     ]
 )

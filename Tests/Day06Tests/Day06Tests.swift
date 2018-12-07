@@ -1,7 +1,7 @@
 import XCTest
 @testable import Day06Lib
 
-final class Day05Tests: XCTestCase {
+final class Day06Tests: XCTestCase {
     func testPart1Case1() {
       let coords = [
         "1, 1",
